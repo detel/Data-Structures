@@ -1,10 +1,10 @@
 class Bit:
     def __init__(self, n):
-        sz = 1
+        size = 1
         while n > sz:
             sz *= 2
-        self.size = sz
-        self.data = [0]*sz
+        self.size = size
+        self.data = [0]*size
 
     def sum(self, i):
         s = 0
