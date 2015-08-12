@@ -24,11 +24,11 @@ def reverse(head,p):                          # recursion
         q._next = p
         p._next = None
         
-def detectLoop(head)                          # Floyd's cycle-finding algorithm
+def detectLoop(head):                         # Floyd's cycle-finding algorithm
         slow,fast = head,head
 
-        while(slow && fast && fast._next)
+        while(slow and fast and fast._next)
                 slow,fast = slow._next,fast._next._next
-                if(slow == fast)
+                if slow == fast:
                         return True
         return False
