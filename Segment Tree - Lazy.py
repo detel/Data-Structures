@@ -58,7 +58,7 @@ def query_tree(node, begin, end, i, j):
 
 		lazy[node] = 0
 
-	if begin >= i and begin <= j:
+	if begin >= i and end <= j:
 		return tree[node]
 
 	mid = (begin+end)>>1
@@ -68,10 +68,10 @@ def query_tree(node, begin, end, i, j):
 	return max(q1, q2)
 
 N = input()
-arr = [1]*N
+arr = range(N)
 
 tree = [0]*(1000)
-lazy = tree
+lazy = [0]*(1000)
 build_tree(1, 0, N-1)
 
 update_tree(1, 0, N-1, 0, 6, 5)
