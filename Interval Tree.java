@@ -71,9 +71,12 @@ public class HeyAngel
         public void rangeUpdate(int _start, int _end, int value) {
         	if(_start > end || start > _end) return;
         	if(start == end) {
-        		sum += value;
-                return; 
-            } 
+        	    /*
+        	     * value to be updated at leaf
+        	     *  arr[i] = value;
+        	     */
+        	     return;
+        	}
             
             //if(Lchild == null) return;
             int mid = (start + end) >> 1;
