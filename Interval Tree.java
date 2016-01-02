@@ -52,19 +52,36 @@ public class HeyAngel
             return ans;
         }
         
-        public void update(int i, int x) {
+        public void update(int i, int value) {
             if(i == start && i == end) {
               /*
                *  value to be updated at leaf
-               *  arr[i] = x;
+               *  arr[i] = value;
                */
               return;
             }
             if(start > i || i > end) return;
             if(Lchild == null) return;
             int mid = (start + end) >> 1;
-            if (i > mid) Rchild.update(i, x);
-            else         Lchild.update(i, x);
+            if (i > mid) Rchild.update(i, value);
+            else         Lchild.update(i, value);
+            join (this, Lchild, Rchild);               
+        }
+        
+        public void rangeUpdate(int _start, int _end, int value) {
+        	if(_start > end || start > _end) return;
+        	if(start == end) {
+        		sum += value;
+                return; 
+            } 
+            
+            //if(Lchild == null) return;
+            int mid = (start + end) >> 1;
+            if (_start > mid)       Rchild.rangeUpdate(_start, _end, value);
+            else if(mid >= _end)    Lchild.rangeUpdate(_start, _end, value);
+            else{                   Lchild.rangeUpdate(_start, mid, value);
+                                    Rchild.rangeUpdate(mid+1, _end, value);
+            }
             join (this, Lchild, Rchild);               
         }
         
