@@ -42,6 +42,21 @@ public class HeyAngel
             }
         }
         
+        public long range () { 
+            return end - start + 1;
+        }
+        
+        public void push () { 
+            if (Lchild != null) {
+                Lchild.sum += Lchild.range () * lazy;
+                Lchild.lazy += lazy;
+                Rchild.sum += Rchild.range () * lazy;
+                Rchild.lazy += lazy;
+                sum = Lchild.sum + Rchild.sum;
+            } 
+            lazy = 0;
+        }
+        
         public IntervalTree query (int a, int b) {
             if (a == start && end == b) return this;
             int mid = (start + end) >> 1;
@@ -84,6 +99,40 @@ public class HeyAngel
             else if(mid >= _end)    Lchild.rangeUpdate(_start, _end, value);
             else{                   Lchild.rangeUpdate(_start, mid, value);
                                     Rchild.rangeUpdate(mid+1, _end, value);
+            }
+            join (this, Lchild, Rchild);               
+        }
+        
+        public IntervalTree lazyQuery (int a, int b) {
+            if (a == start && end == b) return this;
+            
+            push();             //being lazy
+            
+            int mid = (start + end) >> 1;
+            if (a > mid) return Rchild.lazyQuery (a, b);
+            if (b <= mid) return Lchild.lazyQuery (a, b);
+            IntervalTree ans = new IntervalTree();
+            join (ans, Lchild.lazyQuery (a, mid), Rchild.lazyQuery (mid + 1, b));
+            return ans;
+        }
+        
+        public void lazyRangeUpdate(int _start, int _end, int value) {
+            if(_start > end || start > _end) return;
+            if(start == _start && end == _end) {
+                /* range updates
+                sum += range()*value;
+                lazy += value;
+                return;
+                */
+            }
+            
+            push();               //being lazy
+            
+            int mid = (start + end) >> 1;
+            if (_start > mid)             Rchild.lazyRangeUpdate(_start, _end, value);
+            else if(mid >= _end)          Lchild.lazyRangeUpdate(_start, _end, value);
+            else{                         Lchild.lazyRangeUpdate(_start, mid, value);
+                                          Rchild.lazyRangeUpdate(mid+1, _end, value);
             }
             join (this, Lchild, Rchild);               
         }
