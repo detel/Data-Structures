@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class BuildBSTFromUnsortedArray {
     
     public static Node[] tree;
-    public static int[] bst_left, bst_right;
+    public static int[] bst_left, bst_right, a;
     public static ArrayList<Integer>[] graph;
     
     @SuppressWarnings("unchecked")
@@ -19,7 +19,7 @@ public class BuildBSTFromUnsortedArray {
         Scanner in = new Scanner(System.in);
         
         int N = in.nextInt();
-        int[] a = new int[N+1];
+        a = new int[N+1];
         graph = new ArrayList[N+1];
         tree = new Node[4*N + 10];
         for (int i = 1; i <= N; i++) {
@@ -53,36 +53,36 @@ public class BuildBSTFromUnsortedArray {
         in.close();
     }
     
-    public static void init(int pos, int l, int r) {
-        tree[pos] = new Node(l, r);
+    public static void init(int idx, int l, int r) {
+        tree[idx] = new Node(l, r);
         if (l < r) {
-            init(pos + pos, l, (l + r) / 2);
-            init(pos + pos + 1, (l + r) / 2 + 1, r);
+            init(2*idx, l, (l + r) / 2);
+            init(2*idx + 1, (l + r) / 2 + 1, r);
         }
     }
 
-    public static void modify(int pos, int l, int r, int j) {
-        if (tree[pos].left == l && tree[pos].right == r)
-            tree[pos].tag = j;
-        else if(l <= Math.min(r, tree[pos + pos].right))
-            modify(pos + pos, l, Math.min(r, tree[pos + pos].right), j);
-        else if(Math.max(l, tree[pos + pos + 1].left) <= r)
-            modify(pos + pos + 1, Math.max(l, tree[pos + pos + 1].left), r, j);
+    public static void modify(int idx, int l, int r, int j) {
+        if (tree[idx].left == l && tree[idx].right == r)
+            tree[idx].tag = j;
+        else if(l <= Math.min(r, tree[2*idx].right))
+            modify(2*idx, l, Math.min(r, tree[2*idx].right), j);
+        else if(Math.max(l, tree[2*idx + 1].left) <= r)
+            modify(2*idx + 1, Math.max(l, tree[2*idx + 1].left), r, j);
     }
 
-    public static int get_node(int pos, int j) {
-        if (tree[pos].left == tree[pos].right)
-            return tree[pos].tag;
-        if (j <= tree[pos + pos].right)
-            return Math.max(tree[pos].tag, get_node(pos + pos, j));
-        return Math.max(tree[pos].tag, get_node(pos + pos + 1, j));
+    public static int get_node(int idx, int j) {
+        if (tree[idx].left == tree[idx].right)
+            return tree[idx].tag;
+        if (j <= tree[2*idx].right)
+            return Math.max(tree[idx].tag, get_node(2*idx, j));
+        return Math.max(tree[idx].tag, get_node(2*idx + 1, j));
     }
     
     public static void printGraph() {
         for (int i = 1; i < graph.length; i++) {
-            System.out.print(i + " --> ");
+            System.out.print(a[i] + " --> ");
             for(Integer j: graph[i])
-                System.out.print(j + " ");
+                System.out.print(a[j] + " ");
             System.out.println();
         }
         
@@ -94,6 +94,7 @@ public class BuildBSTFromUnsortedArray {
         public Node(int l, int r) {
             this.left = l;
             this.right = r;
+            this.tag = 0;
         }
 
         public void print() {
