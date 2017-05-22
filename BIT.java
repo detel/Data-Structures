@@ -3,6 +3,7 @@ public class BIT {
 	
 	int []tree;
 	int size;
+	int lolo;
 	
 	BIT(int n) {
 		size = n;
